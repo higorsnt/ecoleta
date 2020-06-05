@@ -1,12 +1,12 @@
 import React from 'react';
 import { FiLogIn } from 'react-icons/fi';
-import {  Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import './styles.css';
 
 import logo from '../../assets/logo.svg';
 
-const Home: React.FC = () => {
+const Home = () => {
   return (
     <div id="page-home">
       <div className="content">
@@ -16,7 +16,9 @@ const Home: React.FC = () => {
 
         <main>
           <h1>Seu marketplace de coleta de resíduos.</h1>
-          <p>Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente.</p>
+          <p>
+            Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente.
+          </p>
 
           <Link to="/create-point">
             <span>

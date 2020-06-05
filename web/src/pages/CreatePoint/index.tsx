@@ -1,5 +1,5 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { Link, useHistory} from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import axios from 'axios';
@@ -8,6 +8,8 @@ import { LeafletMouseEvent } from 'leaflet';
 import './styles.css';
 import logo from '../../assets/logo.svg';
 import api from '../../services/api';
+
+import WarningScreen from '../components/WarningScreen';
 
 interface Item {
   id: number;
@@ -37,6 +39,7 @@ const CreatePoint: React.FC = () => {
     whatsapp: '',
   });
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [openModal, setOpenModal] = useState(false);
 
   const history = useHistory();
 
@@ -103,13 +106,13 @@ const CreatePoint: React.FC = () => {
 
   function handleSelectItem(id: number) {
     const alreadySelected = selectedItems.findIndex(item => item === id);
-    
+
     if (alreadySelected >= 0) {
       const filteredItems = selectedItems.filter(item => item !== id);
 
       setSelectedItems(filteredItems);
     } else {
-      setSelectedItems([ ...selectedItems, id]);
+      setSelectedItems([...selectedItems, id]);
     }
   }
 
@@ -134,7 +137,12 @@ const CreatePoint: React.FC = () => {
     };
 
     await api.post('points', data);
-    history.push('/');
+
+    setOpenModal(true);
+    setTimeout(() => {
+      setOpenModal(false);
+      history.push('/');
+    }, 800);
   }
 
   return (
@@ -234,7 +242,7 @@ const CreatePoint: React.FC = () => {
 
           <ul className="items-grid">
             {items.map(item => (
-              <li className={selectedItems.includes(item.id) ? 'selected' : '' } key={item.id} onClick={() => handleSelectItem(item.id)}>
+              <li className={selectedItems.includes(item.id) ? 'selected' : ''} key={item.id} onClick={() => handleSelectItem(item.id)}>
                 <img src={item.image_url} alt={item.title} />
                 <span>{item.title}</span>
               </li>
@@ -246,6 +254,8 @@ const CreatePoint: React.FC = () => {
           Cadastrar ponto de coleta
         </button>
       </form>
+
+      <WarningScreen open={openModal} />
     </div>
   );
 }
