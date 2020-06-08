@@ -1,8 +1,28 @@
 import { Request, Response } from 'express';
+import ip from 'ip';
+
 import knex from '../database/connection';
 
+interface Point {
+  image?: string;
+  email: string;
+  whatsapp: string;
+  latitude: string;
+  longitude: string;
+  city: string;
+  uf: string;
+  items: string;
+  id: number;
+  image_url?: string;
+}
+
+interface PointItems extends Point {
+  title: string;
+}
+
 class PointsController {
-  async create(request: Request, response: Response) {
+  async create(request: Request, response: Response): Promise<Response<Point>> {
+    console.log(request.body);
     const {
       name,
       email,
@@ -11,7 +31,7 @@ class PointsController {
       longitude,
       city,
       uf,
-      items
+      items,
     } = request.body;
 
     const trx = await knex.transaction();
@@ -24,7 +44,7 @@ class PointsController {
       latitude,
       longitude,
       city,
-      uf
+      uf,
     };
 
     const insertedIds = await trx('points').insert(point);
@@ -38,8 +58,8 @@ class PointsController {
         return {
           item_id,
           point_id,
-        }
-      })
+        };
+      });
 
     await trx('point_items').insert(pointItems);
 
@@ -49,9 +69,9 @@ class PointsController {
       id: point_id,
       ...point,
     });
-  };
+  }
 
-  async show(request: Request, response: Response) {
+  async show(request: Request, response: Response): Promise<Response<Point>> {
     const { id } = request.params;
 
     const point = await knex('points').where('id', id).first();
@@ -67,13 +87,16 @@ class PointsController {
 
     const serializedPoint = {
       ...point,
-      image_url: `http://10.0.0.104:3333/uploads/${point.image}`,
+      image_url: `http://${ip.address()}:3333/uploads/${point.image}`,
     };
 
     return response.json({ point: serializedPoint, items });
-  };
+  }
 
-  async index(request: Request, response: Response) {
+  async index(
+    request: Request,
+    response: Response
+  ): Promise<Response<PointItems>> {
     const { city, uf, items } = request.query;
     const parsedItems = String(items)
       .split(',')
@@ -90,7 +113,7 @@ class PointsController {
     const serializedPoints = points.map(point => {
       return {
         ...point,
-        image_url: `http://10.0.0.104:3333/uploads/${point.image}`,
+        image_url: `http://${ip.address()}:3333/uploads/${point.image}`,
       };
     });
 
