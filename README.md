@@ -12,7 +12,9 @@
   <img alt="Made by Rocketseat" src="https://img.shields.io/badge/made%20by-Rocketseat-%237519C1">
 </p>
 
-<img alt="Ecoleta" width="500px" src="./.github/Ecoleta.png" />
+<p align="center">
+  <img alt="Ecoleta" width="650px" src="./.github/Ecoleta.png" />
+<p>
 
 ## :bookmark: Projeto
 
