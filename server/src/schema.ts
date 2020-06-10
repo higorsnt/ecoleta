@@ -44,9 +44,6 @@ export default {
           'string.empty': 'Items cannot be empty.',
           'any.required': 'Items is required.',
         }),
-        image: Joi.any().required().messages({
-          'any.required': 'Image is required.',
-        }),
       }),
     },
     {

@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import ip from 'ip';
 
 import knex from '../database/connection';
 
@@ -11,7 +10,7 @@ class ItemsController {
       return {
         id: item.id,
         title: item.title,
-        image_url: `http://${ip.address()}:3333/uploads/${item.image}`,
+        image_url: `http://10.0.0.104:3333/uploads/${item.image}`,
       };
     });
 

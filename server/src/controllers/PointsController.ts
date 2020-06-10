@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import ip from 'ip';
 
 import knex from '../database/connection';
 
@@ -22,7 +21,6 @@ interface PointItems extends Point {
 
 class PointsController {
   async create(request: Request, response: Response): Promise<Response<Point>> {
-    console.log(request.body);
     const {
       name,
       email,
@@ -87,7 +85,7 @@ class PointsController {
 
     const serializedPoint = {
       ...point,
-      image_url: `http://${ip.address()}:3333/uploads/${point.image}`,
+      image_url: `http://10.0.0.104:3333/uploads/${point.image}`,
     };
 
     return response.json({ point: serializedPoint, items });
@@ -113,7 +111,7 @@ class PointsController {
     const serializedPoints = points.map(point => {
       return {
         ...point,
-        image_url: `http://${ip.address()}:3333/uploads/${point.image}`,
+        image_url: `http://10.0.0.104:3333/uploads/${point.image}`,
       };
     });
 
